@@ -1,3 +1,7 @@
+// mod pointer_ref;
+mod structures;
+
 fn main() {
-    println!("Hello, world!");
+	// pointer_ref::run();
+	structures::run();
 }
