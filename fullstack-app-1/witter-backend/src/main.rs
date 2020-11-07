@@ -4,7 +4,7 @@ use sqlx::query;
 use sqlx::PgPool;
 use sqlx::Pool;
 use tide::Request;
-use tide::Server;
+use tide::Server; //friendly HTTP server
 
 #[async_std::main]
 async fn main() -> Result<(), Error> {
@@ -17,10 +17,18 @@ async fn main() -> Result<(), Error> {
 	let db_pool: PgPool = Pool::new(&db_url).await?;
 	let rows = query!("select 1 as one").fetch_one(&db_pool).await?;
 	dbg!(rows);
-	let myName = "ngajda".to_string();
-	let mut app: Server<State> = Server::with_state(State { db_pool, myName });
+	let my_name = "ngajda".to_string();
+	let state = State {
+		db_pool,
+		my_name
+	};
+	let mut app: Server<State> = Server::with_state(state);
 	app.at("/").get(|req: Request<State>| async move {
-		Ok(format!("Hello, world. {}!", &req.state().myName))
+		let db_pool: &PgPool = &req.state().db_pool;
+
+		query!("select 1 as one").fetch_one(db_pool).await?;
+		
+		Ok(format!("Hello, world. {}!", &req.state().my_name))
 	});
 
 	app.listen("127.0.0.1:9000").await?;
@@ -28,10 +36,10 @@ async fn main() -> Result<(), Error> {
 	Ok(())
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct State {
 	db_pool: PgPool,
-	myName: String,
+	my_name: String,
 }
 
 #[derive(thiserror::Error, Debug)]
