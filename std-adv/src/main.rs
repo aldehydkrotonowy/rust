@@ -1,17 +1,5 @@
-fn try_main() -> std::io::Result<()> {
-    let entries = std::fs::read_dir("/home/norbert")?;
-
-    for entry in entries {
-        println!("Name: {}", entry?.path().display());
-    }
-
-    Ok(())
-}
+mod list_folder;
 
 fn main() {
-    let res = try_main();
-
-    if let Err(e) = res {
-        println!("Error: {}", e);
-    }
+    list_folder::run();
 }
