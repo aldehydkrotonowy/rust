@@ -41,4 +41,9 @@ pub fn run(){
         root.extend();
     }
     print!("{:#?}", root);
+
+    let chip_string : String = String::from("kukuryku na patyku");
+
+    //not on stack nor chip, pointer to someone else's memory
+    let my_slice: &str = "kuku tu jestem"; 
 }
