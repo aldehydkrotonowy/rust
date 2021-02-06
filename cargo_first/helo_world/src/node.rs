@@ -1,3 +1,4 @@
+///https://stackoverflow.com/questions/29296038/implementing-a-mutable-tree-structure
 #[derive(Debug)]
 struct Node {
     children: Vec<Node>,
@@ -39,5 +40,5 @@ pub fn run(){
     for _ in 0..10  {
         root.extend();
     }
-    print!("{:?}", root);
+    print!("{:#?}", root);
 }
